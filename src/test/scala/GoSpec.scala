@@ -1,16 +1,28 @@
 import org.scalatest._
+import org.scalatest.prop.TableDrivenPropertyChecks._
 
 class GoSpec extends FlatSpecLike with Matchers {
 
   behavior of "The App"
 
+  val shopping =
+    Table(
+      ("items", "total"),  // First tuple defines column names
+      (List("Apple","Apple","Orange","Apple"), 2.05),
+      (List("Apple","Apple","Apple"), 1.80),
+      (List(), 0.0) // empty cart
+    )
+
   it should "sum prices rights" in {
 
-    val cart = new ShoppingCart()
+    forAll(shopping) { (items: List[String], total: Double) =>
 
-    val total = cart.sumItems(List("Apple","Apple","Orange","Apple"))
+      val cart = new ShoppingCart()
 
-    total should be (2.05)
+      val sum = cart.sumItems(items)
+
+      sum should be (total)
+    }
 
   }
 
