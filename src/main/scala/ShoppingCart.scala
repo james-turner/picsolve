@@ -7,7 +7,9 @@ class ShoppingCart {
   )
 
   def sumItems(items: List[String]): Double = {
-    2.05
+    items.map { s =>
+      prods(s).toDouble
+    }.sum/100
   }
 
 }
