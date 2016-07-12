@@ -1,4 +1,4 @@
-class ShoppingCart {
+class ShoppingCart(discounts: Discount*) {
 
   // applying items in pence
   val prods = Map(
@@ -8,9 +8,11 @@ class ShoppingCart {
 
   def sumItems(items: List[String]): Double = {
     // can probably be rewritten as a for comprehension
-    Bogof("Apple").applyDiscounts(ThreeForTwo("Orange").applyDiscounts(items.map { s =>
-      (s, prods(s))
-    })).map(_._2).sum.toDouble/100
+    var initialItems = items.map { s => (s, prods(s)) }
+    discounts.foreach { d =>
+      initialItems = d.applyDiscounts(initialItems)
+    }
+    initialItems.map(_._2).sum.toDouble/100
   }
 
 }
